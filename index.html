@@ -557,6 +557,10 @@ readinessProbe:
         <section>
           <section data-transition="fade-out">
             <h1>Get our hands dirty!!</h1>
+            <code data-trim data-noescape>
+$ kubectl run nginx --image=nginx --replicas=1 --port=80 <br \>
+$ kubectl expose deployment nginx --port=80 --target-port=80 --type=LoadBalancer                
+            </code>
           </section>
         </section>
       </div>
