@@ -1,0 +1,586 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Use with reveal.js 3.8.0 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Kubestarter</title>
+
+    <link rel="stylesheet" href="reveal.js-3.8.0/css/reveal.css">
+    <link rel="stylesheet" href="reveal.js-3.8.0/css/theme/black.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js-3.8.0/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js-3.8.0/css/print/pdf.css' : 'reveal.js-3.8.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides" >
+        <!-- Intro -->
+        <section>
+          <section>
+            <h1>Kubestarter</h1>
+            <h2>All handles to get started!</h2>
+            <p/>
+            <img src="img/its-working.gif" style="border:none; background:none;width:40%;" class="fragment"/><br/>
+          </section>
+          <section>
+            <h3>whoami</h3>
+            <div id="left">
+              <ul>
+                <li>Fabian Met</li>
+                <li>Infrastructure / DevOps engineer</li>
+                <li>f.met@fullstaq.com</li>
+                <li><a href="https://github.com/fabianmet/">github.com/fabianmet</a></li>
+                <li class="fragment">Specialize in kubernetes based deployments</li>
+              </ul>
+            </div>
+            <div id="right">
+              <img src="img/profile.jpg" style="border:none; background:none;width:30%;"/><br/>
+            </div>
+          </section>
+          <section>
+            <h3>Agenda</h3>
+            <small class="fragment"><em>"Don’t anthropomorphize computers, they hate that" - David Wheeler</em></small><br/>
+            <ol>
+              <li class="fragment">Kubernetes. But why?</li>
+              <li class="fragment">What is a Pod?</li>
+              <li class="fragment">Conception (CI build)</li>
+              <li class="fragment">Birth (deployment)</li>
+              <div class="fragment">
+              <li>Life (running in k8s)</li>
+                <ul>
+                  <li>The environment</li>
+                  <li>Finding a mate (service discovery)</li>
+                  <li>Health</li>
+                </ul>
+              </li>
+              </div>
+              <li class="fragment">Retirement and death</li>
+              <li class="fragment">How to reach pods</li>
+              <li class="fragment">Getting started</li>
+            </ol>
+          </section>
+        </section>
+        <!-- But why? -->
+        <section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+            <p/>
+                <img src="img/but-why.gif" style="border:none; background:none;width:40%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>Machines acting up?</h3>
+            <p/>
+                <img src="img/shotgun.gif" style="border:none; background:none;width:40%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>The source of truth, the boss</h3>
+            <p/>
+                <img src="img/boss.gif" style="border:none; background:none;width:40%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>The apiserver</h3>
+            <p/>
+                <img src="img/input.gif" style="border:none; background:none;width:40%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>The scheduler</h3>
+            <p/>
+                <img src="img/middle-man.png" style="border:none; background:none;height:30%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>The workers</h3>
+            <p/>
+                <img src="img/worker.gif" style="border:none; background:none;height:30%;" class="fragment"/><br/>
+            </section>
+            <section>
+                <h2>Kubernetes. But why?</h2>
+                <h3>The workers #2</h3>
+            <p/>
+                <img src="img/network.jpg" style="border:none; background:none;height:30%;" class="fragment"/><br/>
+            </section>
+        </section>
+        <!-- What is a pod -->
+        <section>
+          <section data-transition="fade-out">
+              <h2>What is a Pod?</h2>
+              <img src="img/pet_dog.jpg" style="border:none; background:none; width: 1000px"/>
+          </section>
+          <section data-transition="fade-in fade-out">
+              <h2>What is a Pod?</h2>
+              <img src="img/sad_dog.jpg" style="border:none; background:none; width: 1000px"/>
+              <h1 style="color:red">Pods are not pets!</h1>
+          </section>
+          <section data-transition="fade-in fade-out">
+              <h2>What is a Pod?</h2>
+              <img src="img/petset.jpg" style="border:none; background:none; width: 1000px"/>
+              <h5 style="color:green">Unless they are....</h5>
+          </section>
+          <section>
+              <h2>What is a Pod?</h2>
+              <small>Running instances of applications</small><br/>
+              <ul>
+                <li>Smallest schedulable unit</li>
+                <li>One or more containers that share the namespace/are tightly coupled</li>
+                <li><em>Ephemeral!</em></li>
+                <li>Namespace?</li>
+                  <ol>
+                    <li class="fragment">Shared memory (SHM)</li>
+                    <li class="fragment">Volumes</li>
+                    <li class="fragment">IP</li>
+                    <li class="fragment">hostname</li>
+                  </ol>
+              </ul>
+          </section>
+          <section>
+              <h2>Pods</h2>
+              <img src="img/pod.png" style="border:none; background:none; width:30%"/>
+          </section>
+          <section>
+            <h3>Containers follow standards</h3>
+            <a href="http://12factor.net/">The Twelve-Factor App</a>
+          </section>
+          <section data-background-image="img/architecture.png" data-background-size="55%" data-background-color="#FFFFFF">
+          </section>
+          <section data-background-image="img/architecture-youarehere.png" data-background-size="55%" data-background-color="#FFFFFF">
+          <!--            <img src="img/architecture.png" style="border:none; background:none; width: 50%"/> -->
+          </section>
+        </section>
+        <!-- Build server -->
+        <section>
+          <section>
+            <h1>Build server</h1>
+            <img src="img/all-the-things.jpg" style="border:none; background:none;width:40%;" /><br/>
+          </section>
+          <section>
+            <h2>Overview</h2>
+            <ol>
+              <li><pre>git push</pre></li>
+              <li>Run your tests</li>
+              <li>Start docker build</li>
+              <li>Push artifact to registry</li>
+              <li>Notify deployment manager</li>
+              <li>Automatic canary/feature deployment</li>
+              <li>(Choose environment to deploy to)</li>
+            </ol>
+            <p/>
+          </section>
+        </section>
+        <!-- Birth -->
+        <section>
+          <section>
+            <h1>Birth</h1>
+            <br/>
+            <img src="img/deploys.gif" style="border:none; background:none;width:50%;" /><br/>
+          </section>
+          <section>
+            <h1>Birth</h1>
+            Pods are born from:<br/>
+            <ol>
+              <li>Replication controllers</li>
+              <li>Deployments (ReplicaSets)</li>
+              <li>Cronjobs (Jobs)</li>
+              <li class="fragment">DaemonSet</li>
+              <li class="fragment">Statefulset</li>
+            </ol>
+          </section>
+          <section>
+            <h5>Pod</h5>
+            <pre style="width:30%; align: center;">
+              <code data-trim >
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  containers:
+  - command:
+    - sleep
+    - "86400"
+    image: alpine:3.10.2
+    name: alpine
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h5>Everything's just Pod templates</h5>
+            <div id="left">
+              <img src="img/monkey.gif" style="border:none; background:none;width:60%;margin: auto;display: block;" /><br/>
+            </div>
+            <div id="right">
+              <pre style="width:90%; align: center;">
+               <code data-trim data-noescape>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug
+spec:
+  replicas: 3
+  selector:
+    app: debug
+  template:
+    metadata:
+      name: debug
+      labels:
+        app: debug
+    spec:
+      containers:
+      - command:
+        - sleep
+        - "86400"
+        image: alpine:3.7
+        name: alpine
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+              <h5>Everything's just Pod templates</h5>
+              <div id="left">
+                <img src="img/monkey.gif" style="border:none; background:none;width:60%;margin: auto;display: block;" /><br/>
+              </div>
+              <div id="right">
+                <pre style="width:90%; align: center;">
+                 <code data-trim data-noescape>
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: jobname
+spec:
+  template:
+    spec:
+      containers:
+      - name: jobname
+        image: alpine:3.7
+        command: ["sleep",  "10"]
+      restartPolicy: Never
+  backoffLimit: 4
+                  </code>
+                </pre>
+              </div>
+            </section>  
+        </section>
+        <!-- Pod life -->
+        <section>
+          <section>
+            <h1>Pod life</h1>
+            <img src="img/alive.gif" style="border:none; background:none;width:20%;" /><br/>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>The environment</h2>
+            <em><small>Variables</small></em><br/>
+            <ul>
+              <li>Variables in PodSpec</li>
+            </ul>
+            <pre style="width:30%; align: center;">
+             <code data-trim data-noescape>
+containers:
+- name: mycontainer
+  image: alpine:3.7
+  <...>
+  env:
+  - name: MY_ENVIRONMENT_VARIABLE
+    value: "value"
+  - name: AND_ANOTHER
+    value: "yup"
+              </code>
+            </pre>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>The environment</h2>
+            <em><small>Variables</small></em><br/>
+            <ul>
+              <li>Variables in PodSpec from shared ConfigMap</li>
+            </ul>
+            <pre style="width:30%; align: center;">
+             <code data-trim data-noescape>
+containers:
+- name: mycontainer
+  image: alpine:3.7
+  <...>
+  env:
+  - name: LOG_LEVEL
+    valueFrom:
+      configMapKeyRef:
+        name: ddyparams
+        key: loglevel
+              </code>
+            </pre>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>The environment</h2>
+            <em><small>Variables</small></em><br/>
+            <ul>
+              <li>Variables in PodSpec from Secret</li>
+            </ul>
+            <pre style="width:30%; align: center;">
+             <code data-trim data-noescape>
+containers:
+- name: mycontainer
+  image: alpine:3.7
+  <...>
+  env:
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: myapp
+        key: databaseurl
+              </code>
+            </pre>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>The environment</h2>
+            <em><small>Variables</small></em><br/>
+            <ul>
+              <li>Variables in PodSpec from Downward API</li>
+            </ul>
+            <pre style="width:30%; align:center;">
+             <code data-trim data-noescape>
+containers:
+- name: mycontainer
+  image: alpine:3.7
+  <...>
+  env:
+  - name: MY_POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+              </code>
+            </pre>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>The environment</h2>
+            <em><small>Variables</small></em><br/>
+            <ul>
+              <li>Load all key/value pairs from ConfigMap or Secret using envFrom</li>
+            </ul>
+            <pre style="width:30%; align:center;">
+             <code data-trim data-noescape>
+containers:
+- name: mycontainer
+  image: alpine:3.7
+  envFrom:
+  - secretRef:
+      name: app-secrets
+  - configMapRef:
+      name: app-configs
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h2>The environment</h2>
+            <em><small>Volumes</small></em><br/>
+            <ul>
+              <li>emptyDir</li>
+              <li>hostPath</li>
+              <li>secret</li>
+              <li class="fragment">GCEPersistentDisk</li>
+              <li class="fragment">AWSElasticBlockStore</li>
+              <li class="fragment">NFS</li>
+              <li class="fragment">iSCSI</li>
+              <li class="fragment">RBD</li>
+              <li class="fragment">CephFS</li>
+              <li class="fragment">Cinder</li>
+              <li class="fragment">VsphereVolume</li>
+            </ul>
+          </section>
+          <section>
+            <h2>The environment</h2>
+            <em><small>Kubernetes default serviceaccount</small></em><br/>
+            <pre style="width:80%; align: center;">
+              <code data-trim data-noescape>
+~ # ls -al /var/run/secrets/kubernetes.io/serviceaccount
+total 0
+drwxrwxrwt    3 root     root           140 Sep 24 14:26 .
+drwxr-xr-x    3 root     root            27 Sep 24 14:26 ..
+drwxr-xr-x    2 root     root           100 Sep 24 14:26 ..9989_24_09_14_26_34.196016358
+lrwxrwxrwx    1 root     root            31 Sep 24 14:26 ..data -> ..9989_24_09_14_26_34.196016358
+lrwxrwxrwx    1 root     root            13 Sep 24 14:26 ca.crt -> ..data/ca.crt
+lrwxrwxrwx    1 root     root            16 Sep 24 14:26 namespace -> ..data/namespace
+lrwxrwxrwx    1 root     root            12 Sep 24 14:26 token -> ..data/token
+              </code>
+            </pre>
+          </section>
+
+          <section data-transition="fade-out">
+            <h2>Health checks</h2>
+            <div id="left">
+              <img src="img/fscked.gif" style="border:none; background:none;width:50%;display:block;margin:auto;"/><br/>
+            </div>
+            <div id="right">
+              <pre style="width:80%; align: center;">
+                <code data-trim data-noescape>
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 120
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h2>Readiness checks</h2>
+            <div id="left">
+              <img src="img/fonzie.jpg" style="border:none; background:none;width:40%;display:block;margin:auto;" /><br/>
+            </div>
+            <div id="right">
+              <pre style="width:80%; align:left;">
+                <code data-trim data-noescape>
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 80
+  initialDelaySeconds: 120
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+                </code>
+              </pre>
+              <div class="fragment">
+              Also:<br/>
+							<ul>
+                <li><pre>exec</pre></li>
+                <li><pre>tcpSocket</pre></li>
+							</ul>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Classed society</h2>
+            <ul>
+              <div class="fragment">
+              <li>QoS (CPU &amp; memory)</li>
+							<ul>
+								<li>Requests</li>
+								<li>Limits</li>
+							</ul>
+              </div>
+              <li class="fragment">RBAC</li>
+              <div class="fragment">
+              <li>NetworkPolicy (distributed firewall)</li>
+                <ul>
+                  <li>Ingress</li>
+                  <li>Egress</li>
+                </ul>
+              </div>
+            </ul>
+          </section>
+        </section>
+        <!-- Pod death -->
+        <section>
+          <section>
+            <h1>Death</h1>
+            <img src="img/death.gif" style="border:none; background:none;width:20%;" /><br/>
+          </section>
+          <section>
+            <h1>Death</h1>
+            <small>Better known as "pod termination"</small><br/>
+            <ul>
+              <li>Containers in a Pod live and die <em>together</em></li>
+              <li>Configurable "grace period" (get your affairs in order for a clean exit)</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Termination</h3>
+            <small>He died doing what he loved.. serving users..</small><br/>
+            <ul>
+              <li>Retirement</li>
+              <li>Node maintainance/swapout</li>
+              <li class="fragment">OOMkiller &#9760;</li>
+              <li class="fragment">"Natural causes" &#9760;</li>
+            </ul>
+          </section>
+        </section>
+        <!-- sidecars enzo -->
+        <section>
+          <section>
+            <h2>"Patterns for Composite Containers"</h2>
+						<br/>
+            <img src="img/cantstophere.jpg" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h3>Sidecar</h3>
+            <small>"Extend and enhance"</small><br/>
+            <img src="img/sidecar-apache.png" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h3>Sidecar</h3>
+            <small>"Extend and enhance"</small><br/>
+            <img src="img/sidecar-nginx.png" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-in">
+            <h3>Sidecar</h3>
+            <small>"Extend and enhance"</small><br/>
+            <img src="img/sidecar-figureitout.png" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-out">
+            <h3>Adapter</h3>
+            "Normalize and abstract"</small><br/>
+            <img src="img/adapter2.png" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h3>Adapter</h3>
+            "Normalize and abstract"</small><br/>
+            <img src="img/adapter-translation.png" style="border:none; background:none;width:30%" />
+          </section>
+          <section data-transition="fade-in fade-out">
+            <h3>Adapter</h3>
+            <small>"Extend and enhance"</small><br/>
+            <img src="img/sidecar-packetbeat.png" style="border:none; background:none;width:30%" />
+            <br/>
+          </section>
+        </section>
+        <!-- Wrapup -->
+        <section>
+          <section data-transition="fade-out">
+            <h1>Get our hands dirty!!</h1>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="reveal.js-3.8.0/lib/js/head.min.js"></script>
+    <script src="reveal.js-3.8.0/js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+        width: '90%',
+        margin: 0.05,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'reveal.js-3.8.0/plugin/markdown/marked.js' },
+          { src: 'reveal.js-3.8.0/plugin/markdown/markdown.js' },
+          { src: 'reveal.js-3.8.0/plugin/notes/notes.js', async: true },
+          { src: 'reveal.js-3.8.0/plugin/tagcloud/tagcloud.js', async: true },
+          { src: 'reveal.js-3.8.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
